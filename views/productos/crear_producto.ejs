@@ -1,0 +1,56 @@
+<%- include('../templates/header', { title: 'Crear Producto' }) %>
+
+<h1 class="text-3xl font-bold text-gray-800 mb-6">Registrar Nuevo Producto</h1>
+
+<div class="card max-w-2xl mx-auto">
+    <form action="/productos/crear" method="POST" class="space-y-4">
+        
+        <!-- Nombre y Precio (Igual) -->
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-bold text-gray-700">Nombre</label>
+                <input type="text" name="nombre" class="input-text mt-1" required value="<%= locals.producto ? producto.nombre : '' %>">
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700">Precio ($)</label>
+                <input type="number" name="precio" step="0.01" class="input-text mt-1" required value="<%= locals.producto ? producto.precio : '' %>">
+            </div>
+        </div>
+
+        <!-- Stock Inicial -->
+        <div>
+            <label class="block text-sm font-bold text-gray-700">Stock Inicial</label>
+            <input type="number" name="cantidad" class="input-text mt-1" required value="<%= locals.producto ? producto.cantidad : '0' %>">
+        </div>
+
+        <!-- NUEVOS CAMPOS: MIN Y MAX -->
+        <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
+            <div>
+                <label class="block text-sm font-bold text-gray-700">Stock Mínimo</label>
+                <input type="number" name="minStock" class="input-text mt-1" required value="<%= locals.producto ? producto.minStock : '5' %>">
+                <p class="text-xs text-gray-500 mt-1">Alerta si baja de esto.</p>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700">Stock Máximo</label>
+                <input type="number" name="maxStock" class="input-text mt-1" required value="<%= locals.producto ? producto.maxStock : '100' %>">
+                <p class="text-xs text-gray-500 mt-1">Límite de almacén.</p>
+            </div>
+        </div>
+
+        <!-- Categoría -->
+        <div>
+            <label class="block text-sm font-bold text-gray-700">Categoría</label>
+            <select name="categoriaID" class="input-text mt-1" required>
+                <% categorias.forEach(c => { %>
+                    <option value="<%= c._id %>"><%= c.nombre %></option>
+                <% }) %>
+            </select>
+        </div>
+
+        <% if (locals.errores) { %> <p class="text-red-500 text-sm"><%= JSON.stringify(errores) %></p> <% } %>
+
+        <button type="submit" class="btn-primary w-full">Guardar Producto</button>
+    </form>
+</div>
+
+<%- include('../templates/footer') %>

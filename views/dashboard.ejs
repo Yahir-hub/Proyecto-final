@@ -1,0 +1,68 @@
+<%- include('templates/header') %>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Dashboard - <%= user.name %></h2>
+        <span class="badge bg-secondary"><%= user.role.toUpperCase() %></span>
+    </div>
+    
+    <div class="row g-4">
+        
+        <!-- REQUERIMIENTO 7 y 8: Secciones por Rol -->
+        
+        <!-- SECCIÓN ALMACENISTA (O ADMIN) -->
+        <% if (user.role === 'almacenista' || user.role === 'administrador') { %>
+        <div class="col-md-6">
+            <div class="card h-100 border-primary">
+                <div class="card-header bg-primary text-white">Almacén e Inventario</div>
+                <div class="card-body d-grid gap-2">
+                    <!-- REQUERIMIENTO 3: Botón Restock -->
+                    <a href="/productos/restock" class="btn btn-outline-primary text-start">
+                        📦 <strong>Resurtir Stock</strong> (Agregar existencias)
+                    </a>
+                    <a href="/productos/crear" class="btn btn-outline-primary text-start">
+                        ✨ Crear Nuevo Producto
+                    </a>
+                    <a href="/categorias/crear" class="btn btn-outline-primary text-start">
+                        🗂 Crear Categoría
+                    </a>
+                    <!-- REQUERIMIENTO 6: Botón Sugerencias -->
+                    <a href="/sugerencias" class="btn btn-warning text-start">
+                        ⚠️ <strong>Ver Sugerencias de Compra</strong> (Stock Bajo)
+                    </a>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <!-- SECCIÓN VENDEDOR (O ADMIN) -->
+        <% if (user.role === 'vendedor' || user.role === 'administrador') { %>
+        <div class="col-md-6">
+            <div class="card h-100 border-success">
+                <div class="card-header bg-success text-white">Ventas</div>
+                <div class="card-body d-grid gap-2">
+                    <a href="/" class="btn btn-outline-success text-start">
+                        🛒 <strong>Ir al Punto de Venta</strong>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <% } %>
+        
+        <!-- SECCIÓN PERFIL (TODOS) -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">Mi Perfil</div>
+                <div class="card-body text-center">
+                    <img src="/uploads/<%= user.fotoPerfil %>" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                    <h5><%= user.name %></h5>
+                    <p class="text-muted"><%= user.username %></p>
+                    <a href="/perfil" class="btn btn-secondary w-100">Editar Perfil</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include('templates/footer') %>

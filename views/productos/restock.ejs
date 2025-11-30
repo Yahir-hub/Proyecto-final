@@ -1,0 +1,60 @@
+<%- include('../templates/header', { title: 'Resurtir Stock' }) %>
+
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800"> Resurtir Inventario</h1>
+        <a href="/dashboard" class="text-indigo-600 hover:underline">Volver</a>
+    </div>
+
+    <% if (locals.mensaje) { %> <div class="bg-green-100 text-green-700 p-4 rounded mb-4"><%= mensaje %></div> <% } %>
+    <% if (locals.error) { %> <div class="bg-red-100 text-red-700 p-4 rounded mb-4"><%= error %></div> <% } %>
+
+    <div class="bg-white rounded-xl shadow p-6">
+        <p class="mb-4 text-gray-600">Selecciona un producto para agregar más unidades. El sistema no permitirá exceder el stock máximo.</p>
+
+        <form action="/productos/restock" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            
+            <div class="md:col-span-2">
+                <label class="block text-sm font-bold text-gray-700 mb-1">Producto</label>
+                <select name="productoID" class="input-text w-full" required onchange="actualizarInfo(this)">
+                    <option value="" data-max="0" data-curr="0">-- Selecciona --</option>
+                    <% productos.forEach(p => { %>
+                        <option value="<%= p._id %>" 
+                                data-current="<%= p.cantidad %>" 
+                                data-max="<%= p.maxStock %>">
+                            <%= p.nombre %> (Actual: <%= p.cantidad %> / Max: <%= p.maxStock %>)
+                        </option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">Cantidad a Agregar</label>
+                <input type="number" name="cantidadAgregar" min="1" class="input-text w-full" required placeholder="Ej: 10">
+            </div>
+
+            <div class="md:col-span-3">
+                <div id="infoStock" class="text-sm text-gray-500 mb-2"></div>
+                <button type="submit" class="btn-primary w-full">Agregar al Inventario</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function actualizarInfo(select) {
+    const option = select.options[select.selectedIndex];
+    const current = parseInt(option.getAttribute('data-current') || 0);
+    const max = parseInt(option.getAttribute('data-max') || 0);
+    const espacio = max - current;
+    
+    const div = document.getElementById('infoStock');
+    if (espacio <= 0) {
+        div.innerHTML = `<span class="text-red-600 font-bold">¡Stock lleno! No puedes agregar más.</span>`;
+    } else {
+        div.innerHTML = `Espacio disponible en almacén: <strong>${espacio}</strong> unidades.`;
+    }
+}
+</script>
+
+<%- include('../templates/footer') %>
