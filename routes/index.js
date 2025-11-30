@@ -7,8 +7,8 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 // Modelos (Archivos en minúsculas)
-import Producto from '../models/producto.js';
-import Categoria from '../models/categoria.js';
+import Producto from '../models/Producto.js';
+import Categoria from '../models/Categoria.js';
 import Venta from '../models/venta.js';
 import Usuario from '../models/usuario.js'; 
 import { requireAuth, requireAdmin, requireAlmacenista, requireVendedor } from '../middleware/auth.js';
